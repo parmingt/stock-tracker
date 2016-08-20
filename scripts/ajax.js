@@ -1,5 +1,5 @@
 var getQuote= function(symbol){
-    var url = "http://dev.markitondemand.com/MODApis/Api/v2/Quote/json?symbol=" + symbol; 
+    var url = "https://www.quandl.com/api/v3/datasets/WIKI/" + symbol + ".json";
     $.ajax({
         url:url,
         success: function(data) {
