@@ -17,11 +17,13 @@ var StockList = React.createClass({
             console.log(stock);
             getQuote(stock, function(data){
                 stock["name"] = data.name;
-            })
-        })
+                this.setState({});
+            }.bind(this));
+        }.bind(this));
     },
     render: function(){
         var stocks = this.state.stocks;
+        console.log(stocks[0].name);
         return (
             <div>
                 <input value={this.state.newSymbol} onChange={this.inputSymbol} />
@@ -38,16 +40,14 @@ var StockList = React.createClass({
 })
 
 var StockBox = React.createClass({
-    getInitialState: function(){
-        var symbol = this.props.stock.symbol;
-        console.log(symbol);
-        var name = this.props.stock.name;
-        console.log(name);
-        return {symbol:symbol, name:name}
-    },
+    // getInitialState: function(){
+    //     var stock = this.props.stock;
+    //     return {stock: stock}
+    // },
     render: function(){
+        console.log("rendering: " + this.props.stock.symbol + this.props.stock.name);
         return (
-            <h1>{this.state.symbol}</h1>
+            <h1>{this.props.stock.symbol + ": " + this.props.stock.name}</h1>
             )
     }
 })
