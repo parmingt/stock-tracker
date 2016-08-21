@@ -4,26 +4,30 @@ var StockList = React.createClass({
         var stocks = this.props.stocks;
         return {stocks:stocks};
     },
+    componentDidMount: function(){
+        this.update();
+    },
     inputSymbol: function(event){
         this.setState({newSymbol: event.target.value});
     },
     addNewSymbol: function(){
-        console.log('clicked');
         var newStock = {'symbol': this.state.newSymbol}
-        this.setState({stocks: this.state.stocks.concat([newStock])});
+        this.setState({stocks: this.state.stocks.concat([newStock])}, function(){
+            this.update();
+        });
+        
     },
     update: function(){
         this.state.stocks.forEach(function(stock){
-            console.log(stock);
             getQuote(stock, function(data){
                 stock["name"] = data.name;
+                stock["lastData"] = data.data[0];
                 this.setState({});
             }.bind(this));
         }.bind(this));
     },
     render: function(){
         var stocks = this.state.stocks;
-        console.log(stocks[0].name);
         return (
             <div>
                 <input value={this.state.newSymbol} onChange={this.inputSymbol} />
@@ -40,15 +44,19 @@ var StockList = React.createClass({
 })
 
 var StockBox = React.createClass({
-    // getInitialState: function(){
-    //     var stock = this.props.stock;
-    //     return {stock: stock}
-    // },
     render: function(){
-        console.log("rendering: " + this.props.stock.symbol + this.props.stock.name);
+        var stock = this.props.stock;
+        {if(stock.lastData) {
         return (
-            <h1>{this.props.stock.symbol + ": " + this.props.stock.name}</h1>
+            <div>
+                <h1>{stock.symbol}</h1>
+                <h5>{stock.name}</h5>
+                <p>Last priced  {stock.lastData[0]} at ${stock.lastData[4]}</p> 
+            </div>
             )
+        } else {
+            return (<div></div>)
+        }}
     }
 })
 
