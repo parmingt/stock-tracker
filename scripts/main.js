@@ -1,6 +1,8 @@
 $(document).ajaxStart(function(){
-    $('#stockInput').fadeOut('fast');
+    $('#stockInput').prop('disabled', true);
+    $('#updateButton').html('Loading...');
 })
 $(document).ajaxStop(function(){
-    $('#stockInput').fadeIn('fast');
+    $('#stockInput').prop('disabled', false);
+    $('#updateButton').html('Update');
 })
