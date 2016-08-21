@@ -12,10 +12,9 @@ var StockList = React.createClass({
     },
     addNewSymbol: function(){
         var newStock = {'symbol': this.state.newSymbol}
-        this.setState({stocks: this.state.stocks.concat([newStock])}, function(){
+        this.setState({stocks: [newStock].concat(this.state.stocks)}, function(){ //add new stock to beginning of array
             this.update();
         });
-        
     },
     update: function(){
         this.state.stocks.forEach(function(stock){
@@ -30,14 +29,16 @@ var StockList = React.createClass({
         var stocks = this.state.stocks;
         return (
             <div>
-                <input value={this.state.newSymbol} onChange={this.inputSymbol} />
-                <button onClick={this.addNewSymbol}>Add</button>
-                <button onClick={this.update}>Update</button>
-                <ul>
+                <div className='form-input' id='stockInput'>
+                    <input className='form-input' value={this.state.newSymbol} onChange={this.inputSymbol} placeholder='Add symbol...'/>
+                    <button onClick={this.addNewSymbol}>Add</button>
+                    <button onClick={this.update}>Update</button>
+                </div>
+                <div className='row'>
                     {stocks.map(function(stock){
                         return <StockBox stock={stock} />
                     })}
-                </ul>
+                </div>
             </div>
         );
     }
@@ -48,7 +49,7 @@ var StockBox = React.createClass({
         var stock = this.props.stock;
         {if(stock.lastData) {
         return (
-            <div>
+            <div className='col-sm-6' >
                 <h1>{stock.symbol}</h1>
                 <h5>{stock.name}</h5>
                 <p>Last priced  {stock.lastData[0]} at ${stock.lastData[4]}</p> 
