@@ -6,7 +6,8 @@ var getQuote= function(stock, callback){
          callback(data.dataset);
         },
         error: function() {
-         console.log("error");
+         console.log("not found");
+         alert("symbol not found");
         },
         type: "GET"
    });
