@@ -19,7 +19,7 @@ var StockList = React.createClass({
                 return;
             }
         });
-        if(!duplicate){
+        if(!duplicate){ //add symbol to array, clear input field, update
             var newStock = {'symbol': this.state.newSymbol}
             this.setState({stocks: [newStock].concat(this.state.stocks)}, function(){ //add new stock to beginning of array
                 this.update();
@@ -30,7 +30,7 @@ var StockList = React.createClass({
     update: function(){
         this.state.stocks.forEach(function(stock){
             getQuote(stock, function(data){
-                stock["name"] = data.name;
+                stock["name"] = getName(stock.symbol, data.name);
                 stock["lastData"] = data.data[0];
                 this.setState({});
             }.bind(this));
@@ -40,10 +40,10 @@ var StockList = React.createClass({
         var stocks = this.state.stocks;
         return (
             <div>
-                <div className='form-input'>
-                    <input id='stockInput' className='form-input' onChange={this.inputSymbol} placeholder='Add symbol...'/>
-                    <button onClick={this.addNewSymbol}>Add</button>
-                    <button onClick={this.update} id='updateButton'>Update</button>
+                <div className='form-inline'>
+                    <input id='stockInput' className='form-control' onChange={this.inputSymbol} placeholder='Add symbol...'/>
+                    <button onClick={this.addNewSymbol} className='btn btn-success'>Add</button>
+                    <button onClick={this.update} id='updateButton' className='btn btn-default'>Update</button>
                 </div>
                 <div className='row'>
                     {stocks.map(function(stock){
@@ -60,10 +60,12 @@ var StockBox = React.createClass({
         var stock = this.props.stock;
         {if(stock.lastData) {
         return (
-            <div className='col-sm-6 stockBox' >
-                <h1>{stock.symbol}</h1>
-                <h5>{stock.name}</h5>
-                <p>Last priced  {stock.lastData[0]} at ${stock.lastData[4]}</p> 
+            <div className='col-sm-6' >
+                <div className='stockBox'>
+                    <h1>{stock.symbol}</h1>
+                    <h5>{stock.name}</h5>
+                    <p>Last priced  {stock.lastData[0]} at ${stock.lastData[4]}</p> 
+                </div>
             </div>
             )
         } else {
