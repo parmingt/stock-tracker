@@ -19,19 +19,17 @@ var StockList = React.createClass({
                 return;
             }
         });
-        if(!duplicate){ //add symbol to array, clear input field, update
+        if(!duplicate){ //add symbol to array, clear input field, rerender
             var newStock = {'symbol': this.state.newSymbol}
-            this.setState({stocks: [newStock].concat(this.state.stocks)}, function(){ //add new stock to beginning of array
-                this.update();
+            getStockData(newStock, function(){
+                this.setState({stocks: [newStock].concat(this.state.stocks)})
                 $('#stockInput').val('');
-            });
+            }.bind(this));
         }
     },
     update: function(){
         this.state.stocks.forEach(function(stock){
-            getQuote(stock, function(data){
-                stock["name"] = getName(stock.symbol, data.name);
-                stock["lastData"] = data.data[0];
+            getStockData(stock, function(){
                 this.setState({});
             }.bind(this));
         }.bind(this));

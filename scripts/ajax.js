@@ -11,3 +11,11 @@ var getQuote= function(stock, callback){
         type: "GET"
    });
 }
+
+var getStockData = function(stock, callback){
+    getQuote(stock, function(data){
+        stock["name"] = getName(stock.symbol, data.name);
+        stock["lastData"] = data.data[0];
+        callback();
+    })
+};
