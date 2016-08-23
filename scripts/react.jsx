@@ -1,7 +1,11 @@
 
 var StockList = React.createClass({
     getInitialState: function(){
-        var stocks = this.props.stocks;
+        var symbolsInput = this.props.stocks;
+        var stocks = [];
+        symbolsInput.forEach(function(symbol){
+           stocks.push(new Stock(symbol)) ;
+        });
         return {stocks:stocks};
     },
     componentDidMount: function(){
@@ -20,9 +24,10 @@ var StockList = React.createClass({
             }
         });
         if(!duplicate){ //add symbol to array, clear input field, rerender
-            var newStock = {'symbol': this.state.newSymbol}
+            var newStock = new Stock(this.state.newSymbol);
             getStockData(newStock, function(){
                 this.setState({stocks: [newStock].concat(this.state.stocks)})
+                this.chartDates();
                 $('#stockInput').val('');
             }.bind(this));
         }
@@ -31,8 +36,26 @@ var StockList = React.createClass({
         this.state.stocks.forEach(function(stock){
             getStockData(stock, function(){
                 this.setState({});
+                this.chartDates();
             }.bind(this));
         }.bind(this));
+    },
+    chartDates: function(){
+        // var dates = ['2016-08-22','2016-08-16','2016-08-17','2016-08-18','2016-08-19'];
+        var dates = getLastWeekDates();
+        var dataSeries = [];
+        this.state.stocks.forEach(function(stock){
+            if(stock.data.length === 0){return;}
+            var priceArray = new Array(dates.length);
+            dates.forEach(function(date, dateArrayIndex){
+                var priceIndex = stock.getIndexOfDate(date);
+                if(priceIndex){
+                    priceArray[dateArrayIndex] = stock.data[priceIndex][4];
+                }
+            })
+            dataSeries.push(priceArray);
+        })
+        makeChart(dates, dataSeries);
     },
     render: function(){
         var stocks = this.state.stocks;
@@ -56,16 +79,17 @@ var StockList = React.createClass({
 var StockBox = React.createClass({
     render: function(){
         var stock = this.props.stock;
-        {if(stock.lastData) {
-        return (
-            <div className='col-sm-6' >
-                <div className='stockBox'>
-                    <h1>{stock.symbol}</h1>
-                    <h5>{stock.name}</h5>
-                    <p>Last priced  {stock.lastData[0]} at ${stock.lastData[4]}</p> 
+        {if(stock.data.length > 0) {
+            var lastPriceTime = moment(stock.data[0][0]).format('MMM Do');
+            return (
+                <div className='col-sm-6' >
+                    <div className='stockBox'>
+                        <h1>{stock.symbol}</h1>
+                        <h5>{stock.name}</h5>
+                        <p>Last closed {lastPriceTime} at ${stock.data[0][4]}</p> 
+                    </div>
                 </div>
-            </div>
-            )
+                )
         } else {
             return (<div></div>)
         }}
@@ -74,4 +98,4 @@ var StockBox = React.createClass({
 
 var destination = document.querySelector("#container");
 
-ReactDOM.render(<StockList stocks={[{symbol:"MSFT"},{symbol:"AAPL"}]} />, destination);
+ReactDOM.render(<StockList stocks={["MSFT","AAPL"]} />, destination);

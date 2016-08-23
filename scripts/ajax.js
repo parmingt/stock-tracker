@@ -6,7 +6,6 @@ var getQuote= function(stock, callback){
          callback(data.dataset);
         },
         error: function() {
-         console.log("not found");
          alert("symbol not found");
         },
         type: "GET"
@@ -14,9 +13,9 @@ var getQuote= function(stock, callback){
 }
 
 var getStockData = function(stock, callback){
-    getQuote(stock, function(data){
-        stock["name"] = getName(stock.symbol, data.name);
-        stock["lastData"] = data.data[0];
+    getQuote(stock, function(dataset){
+        stock["name"] = getName(stock.symbol, dataset.name);
+        stock.data = dataset.data;
         callback();
     })
 };
