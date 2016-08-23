@@ -44,7 +44,7 @@ Stock.prototype.getIndexOfDate = function(date){
 
 function getLastWeekDates(){
     var dateArray = [];
-    for(var i = 1; i <= 7; i++){
+    for(var i = 7; i >= 1; i--){
         dateArray.push(moment().subtract(i,'days').format('YYYY-MM-DD'));
     }
     return dateArray;
