@@ -22,25 +22,24 @@ function makeChart(dates,dataSeries){
     };
     var chart = new Chartist.Line('.ct-chart', data);
     chart.on('draw', function(){
-        // var index = 0;
-        // $('.ct-line').each(function(){
-        //     var colorCode = lineColors[lineColors.length - index - 1];
-        //     $(this).css('stroke',colorCode);
-        //     index++;
-        // })
-        
-        // index = 0;
-        // $('.ct-point').each(function(){
-        //     var colorCode = lineColors[lineColors.length - index - 1];
-        //     $(this).css('stroke',colorCode);
-        //     index++;
-        // })
     });
 }
 
 var Stock = function(symbol){
     this.symbol = symbol;
     this.data = [];
+}
+
+function addHoverListeners(stocks) {
+  stocks.forEach(function(stock,index){
+      $('.stock-' + index).mouseover(function(){
+          $('.line').hide();
+          $('.line-' + index).show();
+      });
+      $('.stock-' + index).mouseout(function(){
+          $('.line').show();
+      });
+  });
 }
 
 Stock.prototype.getIndexOfDate = function(date){

@@ -47,14 +47,16 @@ var StockList = React.createClass({
         var dataSeries = [];
         this.state.stocks.forEach(function(stock, index){
             var priceArray = getDataForChart(units,dates,stock);
-            var className = 'line-' + index;
+            var className = 'line line-' + index;
             dataSeries.push({name: stock.symbol, className:className, data:priceArray});
         });
         dates.forEach(function(date, index){
             dates[index] = moment(date).format('MMM Do');
         })
         makeChart(dates, dataSeries);
-        this.setState({});
+        this.setState({}, function(){
+            addHoverListeners(this.state.stocks);
+        });
     },
     changeUnits: function(event){
         this.setState({units: event.target.value},function(){
