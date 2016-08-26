@@ -57,20 +57,23 @@ Stock.prototype.getIndexOfDate = function(date){
 function getChartDates(timeframe){
     var dateArray = [];
     var numDays;
+    var decrement = 1;
     switch(timeframe){
         case 'week':
             numDays = 7;
             break;
         case 'month':
             numDays = 30;
+            decrement = 2;
             break;
         case 'year':
             numDays = 365;
+            decrement = 10;
             break;
         default:
             numDays = 7;
     }
-    for(var i = numDays; i >= 1; i--){
+    for(var i = numDays; i >= 1; i-= decrement){
         dateArray.push(moment().subtract(i,'days').format('YYYY-MM-DD'));
     }
     return dateArray;

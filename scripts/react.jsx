@@ -48,6 +48,9 @@ var StockList = React.createClass({
             var priceArray = getDataForChart(units,dates,stock);
             dataSeries.push({name: stock.symbol, data:priceArray});
         });
+        dates.forEach(function(date, index){
+            dates[index] = moment(date).format('MMM Do');
+        })
         makeChart(dates, dataSeries);
         
     },
