@@ -54,9 +54,23 @@ Stock.prototype.getIndexOfDate = function(date){
     }
 }
 
-function getLastWeekDates(){
+function getChartDates(timeframe){
     var dateArray = [];
-    for(var i = 7; i >= 1; i--){
+    var numDays;
+    switch(timeframe){
+        case 'week':
+            numDays = 7;
+            break;
+        case 'month':
+            numDays = 30;
+            break;
+        case 'year':
+            numDays = 365;
+            break;
+        default:
+            numDays = 7;
+    }
+    for(var i = numDays; i >= 1; i--){
         dateArray.push(moment().subtract(i,'days').format('YYYY-MM-DD'));
     }
     return dateArray;

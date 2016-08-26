@@ -6,7 +6,7 @@ var StockList = React.createClass({
         symbolsInput.forEach(function(symbol){
            stocks.push(new Stock(symbol)) ;
         });
-        return {stocks:stocks, units:'%'};
+        return {stocks:stocks, units:'%', timeframe: 'week'};
     },
     componentDidMount: function(){
         this.update();
@@ -41,8 +41,7 @@ var StockList = React.createClass({
         }.bind(this));
     },
     chartDates: function(){
-        // var dates = ['2016-08-22','2016-08-16','2016-08-17','2016-08-18','2016-08-19'];
-        var dates = getLastWeekDates();
+        var dates = getChartDates(this.state.timeframe);
         var units = this.state.units;
         var dataSeries = [];
         this.state.stocks.forEach(function(stock){
@@ -54,6 +53,11 @@ var StockList = React.createClass({
     },
     changeUnits: function(event){
         this.setState({units: event.target.value},function(){
+            this.chartDates();
+        });
+    },
+    changeTimeframe: function(event){
+        this.setState({timeframe: event.target.value},function(){
             this.chartDates();
         });
     },
@@ -72,9 +76,14 @@ var StockList = React.createClass({
                     <input id='stockInput' className='form-control' onChange={this.inputSymbol} placeholder='Add symbol...'/>
                     <button onClick={this.addNewSymbol} className='btn btn-success'>Add</button>
                     <button onClick={this.update} id='updateButton' className='btn btn-default'>Update</button>
-                    <select id='display-units' onChange={this.changeUnits}>
+                    <select id='display-units' onChange={this.changeUnits} className='form-control'>
                         <option>%</option>
                         <option>$</option>
+                    </select>
+                    <select id='display-timeframe' onChange={this.changeTimeframe} className='form-control'>
+                        <option value='week'>Past Week</option>
+                        <option value='month'>Past Month</option>
+                        <option value='year'>Past Year</option>
                     </select>
                 </div>
                 <div className='row'>
@@ -99,11 +108,10 @@ var StockBox = React.createClass({
             return (
                 <div className='col-sm-6' >
                     <div className='stockBox'>
-                        <span type="button"  className="glyphicon glyphicon-remove"onClick={this.handleRemoveStock}></span>
+                        <span type="button"  className="glyphicon glyphicon-remove" onClick={this.handleRemoveStock}></span>
                         <h1>{stock.symbol}</h1>
                         <h5>{stock.name}</h5>
                         <p>Last closed {lastPriceTime} at ${stock.data[0][4]}</p> 
-                        
                     </div>
                 </div>
                 )
