@@ -9,18 +9,23 @@ $colors-list: #D81F26 #F15D51 #F7A396 #FDE2DB #DDE9EC #88CADD #0092C2;
 }
 
 .stockBox {
-    border: 2px solid;
+    border: 1px solid;
     padding: 5px;
     border-radius: 5px;
     margin: 5px;
+    &:hover {border-color:white;}
 }
 .form-inline {
     margin-bottom: 10px;
 }
 .jumbotron {
     text-align: center;
+    background-color: grey;
 }
 .glyphicon-remove {
     float: right;
     border: 1px solid;
+}
+body {
+    background-color: lightgrey;
 }

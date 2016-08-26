@@ -41,19 +41,25 @@
   stroke: #D81F26; }
 
 .stockBox {
-  border: 2px solid;
+  border: 1px solid;
   padding: 5px;
   border-radius: 5px;
   margin: 5px; }
+  .stockBox:hover {
+    border-color: white; }
 
 .form-inline {
   margin-bottom: 10px; }
 
 .jumbotron {
-  text-align: center; }
+  text-align: center;
+  background-color: grey; }
 
 .glyphicon-remove {
   float: right;
   border: 1px solid; }
+
+body {
+  background-color: lightgrey; }
 
 /*# sourceMappingURL=styles.css.map */

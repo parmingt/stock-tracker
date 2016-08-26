@@ -78,7 +78,17 @@ function getChartDates(timeframe){
             numDays = 7;
     }
     for(var i = numDays; i >= 1; i-= decrement){
-        dateArray.push(moment().subtract(i,'days').format('YYYY-MM-DD'));
+        var date = moment().subtract(i,'days');
+        //check for saturdays and sundays
+        // if (moment(date).weekday() === 6) {
+        //     date = moment(date).weekday(-1);
+        // }
+        // if (moment(date).weekday() === 7) {
+        //     date = moment(date).weekday(-2);
+        // }
+        if(dateArray.indexOf(date.format('YYYY-MM-DD')) < 0){
+            dateArray.push(date.format('YYYY-MM-DD'));
+        }
     }
     return dateArray;
 }
