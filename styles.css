@@ -11,6 +11,10 @@
 .jumbotron {
     text-align: center;
 }
-/*.ct-series-a .ct-line{*/
+/*.AAPL .ct-line{*/
 /*    stroke: black;*/
 /*}*/
+.glyphicon-remove {
+    float: right;
+    border: 1px solid;
+}

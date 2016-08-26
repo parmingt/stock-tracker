@@ -6,7 +6,7 @@ var StockList = React.createClass({
         symbolsInput.forEach(function(symbol){
            stocks.push(new Stock(symbol)) ;
         });
-        return {stocks:stocks};
+        return {stocks:stocks, units:'%'};
     },
     componentDidMount: function(){
         this.update();
@@ -43,12 +43,25 @@ var StockList = React.createClass({
     chartDates: function(){
         // var dates = ['2016-08-22','2016-08-16','2016-08-17','2016-08-18','2016-08-19'];
         var dates = getLastWeekDates();
+        var units = this.state.units;
         var dataSeries = [];
         this.state.stocks.forEach(function(stock){
-            var priceArray = getDataForChart('$',dates,stock);
-            dataSeries.push(priceArray);
-        })
+            var priceArray = getDataForChart(units,dates,stock);
+            dataSeries.push({name: stock.symbol, data:priceArray});
+        });
         makeChart(dates, dataSeries);
+    },
+    changeUnits: function(event){
+        this.setState({units: event.target.value},function(){
+            this.chartDates();
+        });
+    },
+    handleRemoveStock: function(index){
+        var newStocks = this.state.stocks;
+        newStocks.splice(index,1);
+        this.setState({stocks: newStocks}, function(){
+            this.chartDates();
+        });  
     },
     render: function(){
         var stocks = this.state.stocks;
@@ -58,15 +71,15 @@ var StockList = React.createClass({
                     <input id='stockInput' className='form-control' onChange={this.inputSymbol} placeholder='Add symbol...'/>
                     <button onClick={this.addNewSymbol} className='btn btn-success'>Add</button>
                     <button onClick={this.update} id='updateButton' className='btn btn-default'>Update</button>
-                    <select id='display-units'>
+                    <select id='display-units' onChange={this.changeUnits}>
                         <option>%</option>
                         <option>$</option>
                     </select>
                 </div>
                 <div className='row'>
-                    {stocks.map(function(stock){
-                        return <StockBox stock={stock} key={stock.symbol}/>
-                    })}
+                    {stocks.map(function(stock, index){
+                        return <StockBox stock={stock} key={stock.symbol} index={index} handleRemoveStock={this.handleRemoveStock}/>
+                    }.bind(this))}
                 </div>
             </div>
         );
@@ -74,6 +87,10 @@ var StockList = React.createClass({
 })
 
 var StockBox = React.createClass({
+    handleRemoveStock: function(){
+        this.props.handleRemoveStock(this.props.index);
+        return false;
+    },
     render: function(){
         var stock = this.props.stock;
         {if(stock.data.length > 0) {
@@ -81,9 +98,11 @@ var StockBox = React.createClass({
             return (
                 <div className='col-sm-6' >
                     <div className='stockBox'>
+                        <span type="button"  className="glyphicon glyphicon-remove"onClick={this.handleRemoveStock}></span>
                         <h1>{stock.symbol}</h1>
                         <h5>{stock.name}</h5>
                         <p>Last closed {lastPriceTime} at ${stock.data[0][4]}</p> 
+                        
                     </div>
                 </div>
                 )
