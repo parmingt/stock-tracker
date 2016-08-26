@@ -1,4 +1,4 @@
-$colors-list: #D81F26 #F15D51 #F7A396 #FDE2DB #DDE9EC #88CADD #0092C2 #144A90;
+$colors-list: #D81F26 #F15D51 #F7A396 #FDE2DB #DDE9EC #88CADD #0092C2;
 @for $i from 1 through length($colors-list) {
     .stock-#{$i - 1} { 
         background-color: nth($colors-list, length($colors-list) - $i + 1);

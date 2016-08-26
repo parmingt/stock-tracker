@@ -1,49 +1,43 @@
 .stock-0 {
-  background-color: #144A90; }
-
-.line-0 {
-  stroke: #144A90; }
-
-.stock-1 {
   background-color: #0092C2; }
 
-.line-1 {
+.line-0 {
   stroke: #0092C2; }
 
-.stock-2 {
+.stock-1 {
   background-color: #88CADD; }
 
-.line-2 {
+.line-1 {
   stroke: #88CADD; }
 
-.stock-3 {
+.stock-2 {
   background-color: #DDE9EC; }
 
-.line-3 {
+.line-2 {
   stroke: #DDE9EC; }
 
-.stock-4 {
+.stock-3 {
   background-color: #FDE2DB; }
 
-.line-4 {
+.line-3 {
   stroke: #FDE2DB; }
 
-.stock-5 {
+.stock-4 {
   background-color: #F7A396; }
 
-.line-5 {
+.line-4 {
   stroke: #F7A396; }
 
-.stock-6 {
+.stock-5 {
   background-color: #F15D51; }
 
-.line-6 {
+.line-5 {
   stroke: #F15D51; }
 
-.stock-7 {
+.stock-6 {
   background-color: #D81F26; }
 
-.line-7 {
+.line-6 {
   stroke: #D81F26; }
 
 .stockBox {
