@@ -7,6 +7,8 @@ $(document).ajaxStop(function(){
     $('#updateButton').html('Update');
 })
 
+var lineColors = ['#ff4d4d','#3333ff','#33ffbb','#ff884d'];
+
 function getName(symbol, longName){
     var index = longName.indexOf(symbol);
     var shortName = longName.substr(0,index - 2);
@@ -20,18 +22,21 @@ function makeChart(dates,dataSeries){
     };
     var chart = new Chartist.Line('.ct-chart', data);
     chart.on('draw', function(){
-        colorBorders();
+        // var index = 0;
+        // $('.ct-line').each(function(){
+        //     var colorCode = lineColors[lineColors.length - index - 1];
+        //     $(this).css('stroke',colorCode);
+        //     index++;
+        // })
+        
+        // index = 0;
+        // $('.ct-point').each(function(){
+        //     var colorCode = lineColors[lineColors.length - index - 1];
+        //     $(this).css('stroke',colorCode);
+        //     index++;
+        // })
     });
 }
-
-function colorBorders(){
-    var asciiCode = 97;
-    $('.stockBox').each(function(){
-        var color = $('.ct-series-' + String.fromCharCode(asciiCode) + ' .ct-line').css('stroke');
-        $(this).css("border-color",color)
-        asciiCode++;
-    })
-};
 
 var Stock = function(symbol){
     this.symbol = symbol;

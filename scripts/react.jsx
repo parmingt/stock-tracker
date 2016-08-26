@@ -26,14 +26,14 @@ var StockList = React.createClass({
         if(!duplicate){ //add symbol to array, clear input field, rerender
             var newStock = new Stock(this.state.newSymbol);
             getStockData(newStock, function(){
-                this.setState({stocks: [newStock].concat(this.state.stocks)})
+                this.setState({stocks: this.state.stocks.concat([newStock])})
                 this.chartDates();
                 $('#stockInput').val('');
             }.bind(this));
         }
     },
     update: function(){
-        this.state.stocks.forEach(function(stock){
+        this.state.stocks.forEach(function(stock, index){
             getStockData(stock, function(){
                 this.setState({});
                 this.chartDates();
@@ -43,16 +43,18 @@ var StockList = React.createClass({
     chartDates: function(){
         var dates = getChartDates(this.state.timeframe);
         var units = this.state.units;
+        
         var dataSeries = [];
-        this.state.stocks.forEach(function(stock){
+        this.state.stocks.forEach(function(stock, index){
             var priceArray = getDataForChart(units,dates,stock);
-            dataSeries.push({name: stock.symbol, data:priceArray});
+            var className = 'line-' + index;
+            dataSeries.push({name: stock.symbol, className:className, data:priceArray});
         });
         dates.forEach(function(date, index){
             dates[index] = moment(date).format('MMM Do');
         })
         makeChart(dates, dataSeries);
-        
+        this.setState({});
     },
     changeUnits: function(event){
         this.setState({units: event.target.value},function(){
@@ -108,9 +110,11 @@ var StockBox = React.createClass({
         var stock = this.props.stock;
         {if(stock.data.length > 0) {
             var lastPriceTime = moment(stock.data[0][0]).format('MMM Do');
+            var boxStyle = {borderColor: stock.colorCode};
+            var classList = "stockBox stock-" + this.props.index;
             return (
                 <div className='col-sm-6' >
-                    <div className='stockBox'>
+                    <div className={classList} style={boxStyle}>
                         <span type="button"  className="glyphicon glyphicon-remove" onClick={this.handleRemoveStock}></span>
                         <h1>{stock.symbol}</h1>
                         <h5>{stock.name}</h5>

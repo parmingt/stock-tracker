@@ -1,9 +1,56 @@
+.stock-0 {
+  background-color: #144A90; }
+
+.line-0 {
+  stroke: #144A90; }
+
+.stock-1 {
+  background-color: #0092C2; }
+
+.line-1 {
+  stroke: #0092C2; }
+
+.stock-2 {
+  background-color: #88CADD; }
+
+.line-2 {
+  stroke: #88CADD; }
+
+.stock-3 {
+  background-color: #DDE9EC; }
+
+.line-3 {
+  stroke: #DDE9EC; }
+
+.stock-4 {
+  background-color: #FDE2DB; }
+
+.line-4 {
+  stroke: #FDE2DB; }
+
+.stock-5 {
+  background-color: #F7A396; }
+
+.line-5 {
+  stroke: #F7A396; }
+
+.stock-6 {
+  background-color: #F15D51; }
+
+.line-6 {
+  stroke: #F15D51; }
+
+.stock-7 {
+  background-color: #D81F26; }
+
+.line-7 {
+  stroke: #D81F26; }
+
 .stockBox {
   border: 2px solid;
   padding: 5px;
   border-radius: 5px;
-  margin: 5px;
-  background-color: lightgrey; }
+  margin: 5px; }
 
 .form-inline {
   margin-bottom: 10px; }
@@ -14,5 +61,8 @@
 .glyphicon-remove {
   float: right;
   border: 1px solid; }
+
+.AAPL .ct-line {
+  stroke: black; }
 
 /*# sourceMappingURL=styles.css.map */
