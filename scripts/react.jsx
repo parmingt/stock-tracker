@@ -50,6 +50,7 @@ var StockList = React.createClass({
             dataSeries.push({name: stock.symbol, data:priceArray});
         });
         makeChart(dates, dataSeries);
+        
     },
     changeUnits: function(event){
         this.setState({units: event.target.value},function(){

@@ -18,8 +18,20 @@ function makeChart(dates,dataSeries){
         labels: dates,
         series: dataSeries
     };
-    new Chartist.Line('.ct-chart', data);
+    var chart = new Chartist.Line('.ct-chart', data);
+    chart.on('draw', function(){
+        colorBorders();
+    });
 }
+
+function colorBorders(){
+    var asciiCode = 97;
+    $('.stockBox').each(function(){
+        var color = $('.ct-series-' + String.fromCharCode(asciiCode) + ' .ct-line').css('stroke');
+        $(this).css("border-color",color)
+        asciiCode++;
+    })
+};
 
 var Stock = function(symbol){
     this.symbol = symbol;
