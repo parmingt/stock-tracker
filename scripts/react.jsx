@@ -45,14 +45,7 @@ var StockList = React.createClass({
         var dates = getLastWeekDates();
         var dataSeries = [];
         this.state.stocks.forEach(function(stock){
-            if(stock.data.length === 0){return;}
-            var priceArray = new Array(dates.length);
-            dates.forEach(function(date, dateArrayIndex){
-                var priceIndex = stock.getIndexOfDate(date);
-                if(priceIndex){
-                    priceArray[dateArrayIndex] = stock.data[priceIndex][4];
-                }
-            })
+            var priceArray = getDataForChart('$',dates,stock);
             dataSeries.push(priceArray);
         })
         makeChart(dates, dataSeries);
@@ -65,6 +58,10 @@ var StockList = React.createClass({
                     <input id='stockInput' className='form-control' onChange={this.inputSymbol} placeholder='Add symbol...'/>
                     <button onClick={this.addNewSymbol} className='btn btn-success'>Add</button>
                     <button onClick={this.update} id='updateButton' className='btn btn-default'>Update</button>
+                    <select id='display-units'>
+                        <option>%</option>
+                        <option>$</option>
+                    </select>
                 </div>
                 <div className='row'>
                     {stocks.map(function(stock){

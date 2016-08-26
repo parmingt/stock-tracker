@@ -49,3 +49,20 @@ function getLastWeekDates(){
     }
     return dateArray;
 }
+
+function getDataForChart(units, dates, stock){
+    if(stock.data.length === 0){return;}
+    var firstDate = dates[0];
+    var priceArray = new Array(dates.length);
+    var firstIndex = stock.getIndexOfDate(firstDate);
+    dates.forEach(function(date, dateArrayIndex){
+        var priceIndex = stock.getIndexOfDate(date);
+        if(priceIndex && units === '%'){
+            priceArray[dateArrayIndex] = ((stock.data[priceIndex][4]/stock.data[firstIndex][4] * 100) - 100).toFixed(2);
+        }
+        else if(priceIndex && units === '$'){
+            priceArray[dateArrayIndex] = (stock.data[priceIndex][4]).toFixed(4);
+        }
+    })
+    return priceArray;
+}
