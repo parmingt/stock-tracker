@@ -79,13 +79,6 @@ function getChartDates(timeframe){
     }
     for(var i = numDays; i >= 1; i-= decrement){
         var date = moment().subtract(i,'days');
-        //check for saturdays and sundays
-        // if (moment(date).weekday() === 6) {
-        //     date = moment(date).weekday(-1);
-        // }
-        // if (moment(date).weekday() === 7) {
-        //     date = moment(date).weekday(-2);
-        // }
         if(dateArray.indexOf(date.format('YYYY-MM-DD')) < 0){
             dateArray.push(date.format('YYYY-MM-DD'));
         }
@@ -95,9 +88,15 @@ function getChartDates(timeframe){
 
 function getDataForChart(units, dates, stock){
     if(stock.data.length === 0){return;}
-    var firstDate = dates[0];
     var priceArray = new Array(dates.length);
+    var firstDate = dates[0];
     var firstIndex = stock.getIndexOfDate(firstDate);
+    var i = 0; //index for looping through date array to find first date with available data
+    while(!firstIndex){
+        i++;
+        firstDate = dates[i];
+        firstIndex = stock.getIndexOfDate(firstDate);
+    }
     dates.forEach(function(date, dateArrayIndex){
         var priceIndex = stock.getIndexOfDate(date);
         if(priceIndex && units === '%'){
