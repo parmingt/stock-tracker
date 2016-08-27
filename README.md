@@ -1,22 +1,31 @@
+# Stock Tracker
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+#### _A site for visualizing data on the stock marker, 8/27/2016_
+#### By **Peter Armington**
 
+## Description
 
-Welcome to your Node.js project on Cloud9 IDE!
+User can pull data on multiple stocks by entering their symbols into a text field. Information on individual stocks is displayed in separate boxes. A graph showing prices over time is displayed at the top of the page. The timeframe and units of the graph may be modified.
 
-This chat example showcases how to use `socket.io` with a static `express` server.
+## Setup/Installation Requirements
 
-## Running the server
+Visit parmingt.github.io/stock-tracker and enter a stock's symbol (eg 'GOOGL') into the form. Hover your mouse over a stock in the list to view data for only that stock.
 
-1) Open `server.js` and start the app by clicking on the "Run" button in the top menu.
+## Known Bugs
 
-2) Alternatively you can launch the app from the Terminal:
+None.
 
-    $ node server.js
+## Support and contact details
 
-Once the server is running, open the project in the shape of 'https://projectname-username.c9.io/'. As you enter your name, watch the Users list (on the left) update. Once you press Enter or Send, the message is shared with all connected clients.
+Contact github user parmingt for help and comments.
+
+## Technologies Used
+
+* AJAX requests to the quandl API to retrieve stock data.
+* React.js used to organize data display.
+* Chartist library handles graphing.
+* Bootstrap for mobile responsiveness.
+
+### License
+
+Copyright (c) 2016 **Peter Armington**
