@@ -22,8 +22,17 @@ app.get('/symbols', function(request, response){
 });
 
 app.post('/addSymbol', function(request, response){
-  var newSymbol = request.body.newSymbol;
-  symbols.push(newSymbol);
+  var newSymbol = request.body.symbol;
+  var exists = false;
+  symbols.forEach(function(symbol){
+    if(symbol === newSymbol){
+      exists = true;
+    }
+  })
+  if(!exists){
+    symbols.push(newSymbol);
+  }
+  response.end();
 })
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){

@@ -14,24 +14,6 @@ var StockList = React.createClass({
     inputSymbol: function(event){
         this.setState({newSymbol: event.target.value});
     },
-    addNewSymbol: function(){
-        var duplicate = false;
-        var newSymbol = this.state.newSymbol;
-        this.state.stocks.forEach(function(stock){ //check for duplicates
-            if(stock.symbol === newSymbol){
-                duplicate = true;
-                return;
-            }
-        });
-        if(!duplicate){ //add symbol to array, clear input field, rerender
-            var newStock = new Stock(this.state.newSymbol);
-            getStockData(newStock, function(){
-                this.setState({stocks: this.state.stocks.concat([newStock])})
-                this.chartDates();
-                $('#stockInput').val('');
-            }.bind(this));
-        }
-    },
     update: function(){
         getAllStockData(this.state.stocks, function(){
             //this.setState({}); //maybe not necessary
@@ -75,17 +57,18 @@ var StockList = React.createClass({
     },
     handleSubmit: function(event){
         event.preventDefault();
-        var data = {};
-        data.newSymbol = this.state.newSymbol;
-        $.ajax({
-            url: '/addSymbol',
-            data: data,
-            type: 'POST',
-            dataType: 'json',
-            success: function(data){
-                console.log('success');
-            }
-        });
+        var submitSymbol = this.state.newSymbol;
+        
+        //update local list
+        var newStock = new Stock(submitSymbol);
+        getStockData(newStock, function(){
+            this.state.stocks.push(newStock);
+            this.chartDates();
+        }.bind(this));
+        
+        //update server list
+        var submitData = {'symbol':submitSymbol}
+        addServerSymbol(submitData);
     },
     render: function(){
         var stocks = this.state.stocks;

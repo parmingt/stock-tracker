@@ -42,3 +42,14 @@ var getServerSymbols = function(callback){
         }
     })
 }
+
+var addServerSymbol = function(submitData, callback){
+    $.ajax({
+        url: '/addSymbol',
+        data: submitData,
+        type: 'POST',
+        dataType: 'json',
+        complete: function(data){
+        }
+    });
+}
