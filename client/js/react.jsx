@@ -8,21 +8,17 @@ var StockList = React.createClass({
         
         var socket = io.connect();
         socket.on('add symbol', function(newSymbol){
-            console.log('symbol added');
             var currentSymbols = this.getSymbolsArray();
             if(currentSymbols.indexOf(newSymbol) < 0){
-                console.log('adding stock to local');
                 var newStock = new Stock(newSymbol);
                 getStockData(newStock, function(){
                     this.state.stocks.push(newStock);
-                    console.log(this.state.stocks)
                     this.chartDates();
                 }.bind(this));
             }
         }.bind(this));     
         
         socket.on('remove symbol', function(removedSymbol){
-            console.log('symbol removed');
             var localStocks = this.state.stocks;
             for(var index = localStocks.length - 1; index >= 0; index--){
                 if(localStocks[index].symbol === removedSymbol){
@@ -36,7 +32,6 @@ var StockList = React.createClass({
         var symbols = this.state.stocks.map(function(stock){
             return stock.symbol;
         });
-        console.log(symbols);
         return symbols;
     },
     getServerData: function(){
@@ -107,7 +102,6 @@ var StockList = React.createClass({
     addNewSymbol: function(event){
         event.preventDefault();
         var submitSymbol = this.state.newSymbol;
-        
         //update local list
         var currentSymbols = this.getSymbolsArray();
         if(currentSymbols.indexOf(submitSymbol) > -1){return;}
@@ -115,6 +109,7 @@ var StockList = React.createClass({
         getStockData(newStock, function(){
             this.state.stocks.push(newStock);
             this.chartDates();
+            this.setState({newSymbol:""});
             //update server list
             var submitData = {'symbol':submitSymbol}
             addServerSymbol(submitData);
@@ -126,7 +121,7 @@ var StockList = React.createClass({
         return (
             <div>
                 <form id='new-symbol-form' className='form-inline'>
-                    <input id='stockInput' name='newSymbol' className='form-control' onChange={this.inputSymbol} placeholder='Add symbol...'/>
+                    <input id='stockInput' name='newSymbol' className='form-control' onChange={this.inputSymbol} controlled={true} value={this.state.newSymbol} placeholder='Add symbol...'/>
                     <button onClick={this.addNewSymbol} className='btn btn-success'>Add</button>
                     <button onClick={this.update} id='updateButton' className='btn btn-default'>Update</button>
                     <select id='display-units' onChange={this.changeUnits} className='form-control'>
