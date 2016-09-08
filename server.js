@@ -8,7 +8,8 @@ var express = require('express');
 var app = express();
 var server = http.createServer(app);
 
-var symbols = ['AAPL', 'MSFT'];
+var initialSymbols = ['AAPL', 'MSFT'];
+var symbolsList = initialSymbols;
 
 app.use(express.static(path.resolve(__dirname, 'client')));
 app.use(express.bodyParser());
@@ -18,32 +19,30 @@ app.get('/', function(request, response) {
 })
 
 app.get('/symbols', function(request, response){
-  response.end(JSON.stringify(symbols));
+  response.end(JSON.stringify(symbolsList));
 });
 
 app.post('/addSymbol', function(request, response){
   var newSymbol = request.body.symbol;
   var exists = false;
-  symbols.forEach(function(symbol){
+  symbolsList.forEach(function(symbol){
     if(symbol === newSymbol){
       exists = true;
     }
   })
   if(!exists){
-    symbols.push(newSymbol);
+    symbolsList.push(newSymbol);
   }
   response.end();
 })
 
 app.post('/removeSymbol',function(request, response){
   var removedSymbol = request.body.symbol;
-  var newSymbols = symbols;
-  newSymbols.forEach(function(symbol, index){
-    if(symbol === removedSymbol){
-      newSymbols.splice(index, 1);
+  for(var index = symbolsList.length - 1; index >= 0; index--){
+    if(symbolsList[index] === removedSymbol){
+      symbolsList.splice(index, 1);
     }
-  });
-  symbols = newSymbols;
+  }
   response.end();
 })
 
