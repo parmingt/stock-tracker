@@ -1,12 +1,13 @@
 {
-  "name": "chat-example",
+  "name": "stock-tracker",
   "version": "0.0.0",
-  "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
+  "description": "A site for tracking and charting various stocks.",
   "main": "server.js",
-  "author": "Mostafa Eweda <mo.eweda@gmail.com>",
+  "author": "Peter Armington <peter.armington@gmail.com>",
   "dependencies": {
     "async": "~0.2.8",
     "express": "~3.2.4",
+    "jquery": "^3.1.0",
     "socket.io": "~0.9.14"
   },
   "scripts": {

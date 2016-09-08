@@ -1,15 +1,15 @@
 
 var StockList = React.createClass({
     getInitialState: function(){
-        var symbolsInput = this.props.stocks;
-        var stocks = [];
-        symbolsInput.forEach(function(symbol){
-           stocks.push(new Stock(symbol)) ;
-        });
-        return {stocks:stocks, units:'%', timeframe: 'week'};
+        return {stocks:[], units:'%', timeFrame:'week'}
     },
     componentDidMount: function(){
-        this.update();
+        getServerSymbols(function(symbols){
+            symbols.forEach(function(symbol){
+                this.state.stocks.push(new Stock(symbol));
+            }.bind(this));
+            this.update();
+        }.bind(this));
     },
     inputSymbol: function(event){
         this.setState({newSymbol: event.target.value});
@@ -33,11 +33,9 @@ var StockList = React.createClass({
         }
     },
     update: function(){
-        this.state.stocks.forEach(function(stock, index){
-            getStockData(stock, function(){
-                this.setState({});
-                this.chartDates();
-            }.bind(this));
+        getAllStockData(this.state.stocks, function(){
+            //this.setState({}); //maybe not necessary
+            this.chartDates();
         }.bind(this));
     },
     chartDates: function(){
@@ -75,13 +73,27 @@ var StockList = React.createClass({
             this.chartDates();
         });  
     },
+    handleSubmit: function(event){
+        event.preventDefault();
+        var data = {};
+        data.newSymbol = this.state.newSymbol;
+        $.ajax({
+            url: '/addSymbol',
+            data: data,
+            type: 'POST',
+            dataType: 'json',
+            success: function(data){
+                console.log('success');
+            }
+        });
+    },
     render: function(){
         var stocks = this.state.stocks;
         return (
             <div>
-                <div className='form-inline'>
-                    <input id='stockInput' className='form-control' onChange={this.inputSymbol} placeholder='Add symbol...'/>
-                    <button onClick={this.addNewSymbol} className='btn btn-success'>Add</button>
+                <form id='new-symbol-form' className='form-inline' onSubmit={this.handleSubmit}>
+                    <input id='stockInput' name='newSymbol' className='form-control' onChange={this.inputSymbol} placeholder='Add symbol...'/>
+                    <button onClick={this.addNewSymbol} className='btn btn-success' type='submit'>Add</button>
                     <button onClick={this.update} id='updateButton' className='btn btn-default'>Update</button>
                     <select id='display-units' onChange={this.changeUnits} className='form-control'>
                         <option>%</option>
@@ -92,7 +104,7 @@ var StockList = React.createClass({
                         <option value='month'>Past Month</option>
                         <option value='year'>Past Year</option>
                     </select>
-                </div>
+                </form>
                 <div className='row'>
                     {stocks.map(function(stock, index){
                         return <StockBox stock={stock} key={stock.symbol} index={index} handleRemoveStock={this.handleRemoveStock}/>
@@ -101,7 +113,7 @@ var StockList = React.createClass({
             </div>
         );
     }
-})
+});
 
 var StockBox = React.createClass({
     handleRemoveStock: function(){
@@ -132,4 +144,4 @@ var StockBox = React.createClass({
 
 var destination = document.querySelector("#container");
 
-ReactDOM.render(<StockList stocks={["MSFT","AAPL"]} />, destination);
+ReactDOM.render(<StockList />, destination);

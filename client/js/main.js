@@ -7,6 +7,12 @@ $(document).ajaxStop(function(){
     $('#updateButton').html('Update');
 })
 
+$(document).ready(function(){
+    $('#add-symbol-form').submit(function(event){
+        event.preventDefault();
+    })
+});
+
 var lineColors = ['#ff4d4d','#3333ff','#33ffbb','#ff884d'];
 
 function getName(symbol, longName){
@@ -28,7 +34,7 @@ function makeChart(dates,dataSeries){
 var Stock = function(symbol){
     this.symbol = symbol;
     this.data = [];
-}
+};
 
 function addHoverListeners(stocks) {
   stocks.forEach(function(stock,index){

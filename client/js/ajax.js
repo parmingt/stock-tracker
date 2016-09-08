@@ -19,3 +19,26 @@ var getStockData = function(stock, callback){
         callback();
     })
 };
+
+var getAllStockData = function(stockList, callback){
+    var numStocks = stockList.length;
+    var count = 0;
+    stockList.forEach(function(stock){
+        getStockData(stock, function(){
+            count++;
+            if(count === numStocks){
+                callback();
+            }
+        })
+    })
+}
+
+var getServerSymbols = function(callback){
+    $.ajax({
+        url: '/symbols',
+        type: 'GET',
+        success: function(data){
+            callback(JSON.parse(data));
+        }
+    })
+}
