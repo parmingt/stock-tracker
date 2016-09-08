@@ -5,6 +5,7 @@ var StockList = React.createClass({
     },
     componentDidMount: function(){
         getServerSymbols(function(symbols){
+            console.log(symbols);
             symbols.forEach(function(symbol){
                 this.state.stocks.push(new Stock(symbol));
             }.bind(this));
@@ -14,9 +15,9 @@ var StockList = React.createClass({
     inputSymbol: function(event){
         this.setState({newSymbol: event.target.value});
     },
-    update: function(){
+    update: function(event){
+        if(event){event.preventDefault();}
         getAllStockData(this.state.stocks, function(){
-            //this.setState({}); //maybe not necessary
             this.chartDates();
         }.bind(this));
     },
@@ -62,7 +63,7 @@ var StockList = React.createClass({
         var submitData = {'symbol':symbol};
         removeServerSymbol(submitData);
     },
-    handleSubmit: function(event){
+    addNewSymbol: function(event){
         event.preventDefault();
         var submitSymbol = this.state.newSymbol;
         
@@ -81,9 +82,9 @@ var StockList = React.createClass({
         var stocks = this.state.stocks;
         return (
             <div>
-                <form id='new-symbol-form' className='form-inline' onSubmit={this.handleSubmit}>
+                <form id='new-symbol-form' className='form-inline'>
                     <input id='stockInput' name='newSymbol' className='form-control' onChange={this.inputSymbol} placeholder='Add symbol...'/>
-                    <button onClick={this.addNewSymbol} className='btn btn-success' type='submit'>Add</button>
+                    <button onClick={this.addNewSymbol} className='btn btn-success'>Add</button>
                     <button onClick={this.update} id='updateButton' className='btn btn-default'>Update</button>
                     <select id='display-units' onChange={this.changeUnits} className='form-control'>
                         <option>%</option>

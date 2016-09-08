@@ -19,7 +19,12 @@ app.get('/', function(request, response) {
 })
 
 app.get('/symbols', function(request, response){
-  response.end(JSON.stringify(symbolsList));
+  if((symbolsList) && symbolsList.length > 0){
+    response.end(JSON.stringify(symbolsList));
+  }
+  else {
+    response.end();
+  }
 });
 
 app.post('/addSymbol', function(request, response){

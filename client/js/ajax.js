@@ -21,8 +21,8 @@ var getStockData = function(stock, callback){
 };
 
 var getAllStockData = function(stockList, callback){
-    console.log(stockList);
     var numStocks = stockList.length;
+    if(numStocks === 0){return;}
     var count = 0;
     stockList.forEach(function(stock){
         getStockData(stock, function(){
