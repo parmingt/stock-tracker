@@ -5,15 +5,7 @@ $(document).ajaxStart(function(){
 $(document).ajaxStop(function(){
     $('#stockInput').prop('disabled', false);
     $('#updateButton').html('Update');
-})
-
-$(document).ready(function(){
-    $('#add-symbol-form').submit(function(event){
-        event.preventDefault();
-    })
 });
-
-var lineColors = ['#ff4d4d','#3333ff','#33ffbb','#ff884d'];
 
 function getName(symbol, longName){
     var index = longName.indexOf(symbol);
@@ -50,8 +42,7 @@ function addHoverListeners(stocks) {
 
 Stock.prototype.getIndexOfDate = function(date){
     var matchedIndex;
-    if(this.data.length === 0){
-        console.log('no data');
+    if((!this.data) || (this.data.length === 0)){
         return;
     } else {
         this.data.forEach(function(item, index){
@@ -83,11 +74,14 @@ function getChartDates(timeframe){
         default:
             numDays = 7;
     }
-    for(var i = numDays; i >= 1; i-= decrement){
-        var date = moment().subtract(i,'days');
-        if(dateArray.indexOf(date.format('YYYY-MM-DD')) < 0){
+    var index = numDays;
+    while(index >= 0){
+        var date = moment().subtract(index,'days');
+        //check that date is not already in array and day of week less or equal to 5 (friday)
+        if((dateArray.indexOf(date.format('YYYY-MM-DD')) < 0) && (date.day() <= 5) && (date.day() > 0)){ 
             dateArray.push(date.format('YYYY-MM-DD'));
         }
+        index -= decrement;
     }
     return dateArray;
 }

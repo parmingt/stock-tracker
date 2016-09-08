@@ -35,6 +35,18 @@ app.post('/addSymbol', function(request, response){
   response.end();
 })
 
+app.post('/removeSymbol',function(request, response){
+  var removedSymbol = request.body.symbol;
+  var newSymbols = symbols;
+  newSymbols.forEach(function(symbol, index){
+    if(symbol === removedSymbol){
+      newSymbols.splice(index, 1);
+    }
+  });
+  symbols = newSymbols;
+  response.end();
+})
+
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
 });
 

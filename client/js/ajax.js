@@ -52,4 +52,15 @@ var addServerSymbol = function(submitData, callback){
         complete: function(data){
         }
     });
+};
+
+var removeServerSymbol = function(submitData, callback){
+    $.ajax({
+        url: '/removeSymbol',
+        data: submitData,
+        type: 'POST',
+        dataType: 'json',
+        complete: function(data){
+        }
+    });
 }

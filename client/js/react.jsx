@@ -49,11 +49,18 @@ var StockList = React.createClass({
         });
     },
     handleRemoveStock: function(index){
+        var symbol = this.state.stocks[index].symbol;
+        
+        //update local list
         var newStocks = this.state.stocks;
         newStocks.splice(index,1);
         this.setState({stocks: newStocks}, function(){
             this.chartDates();
-        });  
+        }); 
+        
+        //update server list
+        var submitData = {'symbol':symbol};
+        removeServerSymbol(submitData);
     },
     handleSubmit: function(event){
         event.preventDefault();
