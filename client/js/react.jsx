@@ -4,12 +4,53 @@ var StockList = React.createClass({
         return {stocks:[], units:'%', timeFrame:'week'}
     },
     componentDidMount: function(){
-        getServerSymbols(function(symbols){
-            console.log(symbols);
-            symbols.forEach(function(symbol){
-                this.state.stocks.push(new Stock(symbol));
+        this.getServerData();
+        
+        var socket = io.connect();
+        socket.on('add symbol', function(newSymbol){
+            console.log('symbol added');
+            var currentSymbols = this.getSymbolsArray();
+            if(currentSymbols.indexOf(newSymbol) < 0){
+                console.log('adding stock to local');
+                var newStock = new Stock(newSymbol);
+                getStockData(newStock, function(){
+                    this.state.stocks.push(newStock);
+                    console.log(this.state.stocks)
+                    this.chartDates();
+                }.bind(this));
+            }
+        }.bind(this));     
+        
+        socket.on('remove symbol', function(removedSymbol){
+            console.log('symbol removed');
+            var localStocks = this.state.stocks;
+            for(var index = localStocks.length - 1; index >= 0; index--){
+                if(localStocks[index].symbol === removedSymbol){
+                    localStocks.splice(index,1);
+                }
+            }
+            this.chartDates();
+        }.bind(this));
+    },
+    getSymbolsArray: function(){
+        var symbols = this.state.stocks.map(function(stock){
+            return stock.symbol;
+        });
+        console.log(symbols);
+        return symbols;
+    },
+    getServerData: function(){
+        var currentSymbols = this.getSymbolsArray();
+        var localStocks = [];
+        getServerSymbols(function(serverSymbols){
+            serverSymbols.forEach(function(symbol){
+                var newStock = new Stock(symbol);
+                localStocks.push(newStock);
+            });
+            getAllStockData(localStocks, function(){
+                this.setState({stocks: localStocks});
+                this.chartDates();
             }.bind(this));
-            this.update();
         }.bind(this));
     },
     inputSymbol: function(event){
@@ -68,15 +109,17 @@ var StockList = React.createClass({
         var submitSymbol = this.state.newSymbol;
         
         //update local list
+        var currentSymbols = this.getSymbolsArray();
+        if(currentSymbols.indexOf(submitSymbol) > -1){return;}
         var newStock = new Stock(submitSymbol);
         getStockData(newStock, function(){
             this.state.stocks.push(newStock);
             this.chartDates();
+            //update server list
+            var submitData = {'symbol':submitSymbol}
+            addServerSymbol(submitData);
         }.bind(this));
         
-        //update server list
-        var submitData = {'symbol':submitSymbol}
-        addServerSymbol(submitData);
     },
     render: function(){
         var stocks = this.state.stocks;

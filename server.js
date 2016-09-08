@@ -1,12 +1,12 @@
-var http = require('http');
 var path = require('path');
+var http = require('http');
 
 var async = require('async');
-var socketio = require('socket.io');
 var express = require('express');
 
 var app = express();
 var server = http.createServer(app);
+var io = require('socket.io').listen(server);
 
 var initialSymbols = ['AAPL', 'MSFT'];
 var symbolsList = initialSymbols;
@@ -38,6 +38,7 @@ app.post('/addSymbol', function(request, response){
   if(!exists){
     symbolsList.push(newSymbol);
   }
+  io.emit('add symbol', newSymbol);
   response.end();
 })
 
@@ -48,8 +49,17 @@ app.post('/removeSymbol',function(request, response){
       symbolsList.splice(index, 1);
     }
   }
+  io.emit('remove symbol', removedSymbol);
   response.end();
 })
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('client update', function(){
+    console.log('client update');
+    io.emit('client update');
+  });
+});
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
 });
