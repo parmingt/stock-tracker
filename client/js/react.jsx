@@ -111,7 +111,7 @@ var StockList = React.createClass({
             this.chartDates();
             this.setState({newSymbol:""});
             //update server list
-            var submitData = {'symbol':submitSymbol}
+            var submitData = {'symbol':submitSymbol};
             addServerSymbol(submitData);
         }.bind(this));
         
