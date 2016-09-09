@@ -1,7 +1,7 @@
 
 var StockList = React.createClass({
     getInitialState: function(){
-        return {stocks:[], units:'%', timeFrame:'week'}
+        return {stocks:[], units:'%', timeframe:'month'}
     },
     componentDidMount: function(){
         this.getServerData();
@@ -130,7 +130,7 @@ var StockList = React.createClass({
                     </select>
                     <select id='display-timeframe' onChange={this.changeTimeframe} className='form-control'>
                         <option value='week'>Past Week</option>
-                        <option value='month'>Past Month</option>
+                        <option value='month' selected>Past Month</option>
                         <option value='year'>Past Year</option>
                     </select>
                 </form>
