@@ -1,57 +1,57 @@
 var getQuote= function(stock, callback){
     var url = "https://www.quandl.com/api/v3/datasets/WIKI/" + stock.symbol + ".json?api_key=" + 'VsizqnSyP2XPZeWZDnwb';
-    $.ajax({
-        url:url,
-        success: function(data) {
-         callback(data.dataset);
-        },
-        error: function() {
-         alert("symbol not found");
-        },
-        type: "GET"
-   });
+    return new Promise((resolve, reject) => {
+        fetch(url)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(myJson) {
+                resolve(myJson.dataset);
+            });
+        });
 }
 
-var getStockData = function(stock, callback){
-    getQuote(stock, function(dataset){
-        stock["name"] = getName(stock.symbol, dataset.name);
-        stock.data = dataset.data;
-        callback();
-    })
+var getStockData = function(stock){
+    return new Promise((resolve, reject) => {
+        if (!stock) {reject();}
+        getQuote(stock).then(function(dataset){
+            stock.name = getName(stock.symbol, dataset.name);
+            stock.data = dataset.data;
+            console.log(stock);
+            resolve();
+        });
+    });
 };
 
-var getAllStockData = function(stockList, callback){
+var getAllStockData = function(stockList){
     var numStocks = stockList.length;
     if(numStocks === 0){return;}
     var count = 0;
-    stockList.forEach(function(stock){
-        getStockData(stock, function(){
-            count++;
-            if(count === numStocks){
-                callback();
-            }
+    return new Promise((resolve, reject) => {
+        stockList.forEach(function(stock){
+            if (!stock.symbol) return count++;
+            getStockData(stock).then(() => {
+                count++;
+                if(count === numStocks){
+                    resolve();
+                }
+            });
         })
     })
 }
 
-var getServerSymbols = function(callback){
-    $.ajax({
-        url: '/symbols',
-        type: 'GET',
-        success: function(data){
-            callback(JSON.parse(data));
-        }
-    })
+var getServerSymbols = function(){
+    return new Promise((resolve, reject) => {
+        fetch('/symbols').then((data) => {
+            resolve(data.json());
+        });
+    });
 }
 
 var addServerSymbol = function(submitData, callback){
-    $.ajax({
-        url: '/addSymbol',
-        data: submitData,
-        type: 'POST',
-        dataType: 'json',
-        complete: function(data){
-        }
+    fetch('/addSymbol', {
+        method: 'POST',
+        body: JSON.stringify(submitData)
     });
 };
 

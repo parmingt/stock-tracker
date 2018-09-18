@@ -37,16 +37,16 @@ var StockList = React.createClass({
     getServerData: function(){
         var currentSymbols = this.getSymbolsArray();
         var localStocks = [];
-        getServerSymbols(function(serverSymbols){
+        getServerSymbols().then(serverSymbols => {
             serverSymbols.forEach(function(symbol){
                 var newStock = new Stock(symbol);
                 localStocks.push(newStock);
             });
-            getAllStockData(localStocks, function(){
+            getAllStockData(localStocks).then(() => {
                 this.setState({stocks: localStocks});
                 this.chartDates();
-            }.bind(this));
-        }.bind(this));
+            });
+        });
     },
     inputSymbol: function(event){
         this.setState({newSymbol: event.target.value});
@@ -62,7 +62,7 @@ var StockList = React.createClass({
         var units = this.state.units;
         
         var dataSeries = [];
-        this.state.stocks.forEach(function(stock, index){
+        this.state.stocks.forEach((stock, index) => {
             var priceArray = getDataForChart(units,dates,stock);
             var className = 'line line-' + index;
             dataSeries.push({name: stock.symbol, className:className, data:priceArray});
@@ -106,18 +106,18 @@ var StockList = React.createClass({
         var currentSymbols = this.getSymbolsArray();
         if(currentSymbols.indexOf(submitSymbol) > -1){return;}
         var newStock = new Stock(submitSymbol);
-        getStockData(newStock, function(){
+        getStockData(newStock).then(() => {
             this.state.stocks.push(newStock);
             this.chartDates();
             this.setState({newSymbol:""});
             //update server list
-            var submitData = {'symbol':submitSymbol};
+            var submitData = {symbol:submitSymbol};
             addServerSymbol(submitData);
-        }.bind(this));
-        
+        });
     },
     render: function(){
         var stocks = this.state.stocks;
+        console.log(stocks);
         return (
             <div>
                 <form id='new-symbol-form' className='form-inline'>

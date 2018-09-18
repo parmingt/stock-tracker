@@ -23,9 +23,11 @@ function makeChart(dates,dataSeries){
     });
 }
 
-var Stock = function(symbol){
-    this.symbol = symbol;
-    this.data = [];
+class Stock {
+    constructor(symbol) {
+        this.symbol = symbol;
+        this.data = [];
+    }
 };
 
 function addHoverListeners(stocks) {
@@ -76,7 +78,7 @@ function getChartDates(timeframe){
     }
     var index = numDays;
     while(index >= 0){
-        var date = moment().subtract(index + 1,'days');
+        var date = moment().subtract(1, 'years').subtract(index + 1,'days');
         //check that date is not already in array and day of week less or equal to 5 (friday)
         if((dateArray.indexOf(date.format('YYYY-MM-DD')) < 0) && (date.day() <= 5) && (date.day() > 0)){ 
             dateArray.push(date.format('YYYY-MM-DD'));
